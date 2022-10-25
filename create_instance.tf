@@ -27,17 +27,6 @@ resource "openstack_networking_secgroup_v2" "create_security_group" {
   description = "my ${var.create_security_group_name} security group"
 }
 
-# resource "openstack_networking_secgroup_rule_v2" "create_secgroup_rule" {
-#   count             = var.security_group_rules != null ? length(var.security_group_rules) : 0
-#   direction         = var.vm_info.security_group.security_group_rules[count.index].direction
-#   ethertype         = var.vm_info.security_group.security_group_rules[count.index].ethertype
-#   protocol          = var.vm_info.security_group.security_group_rules[count.index].protocol
-#   port_range_min    = var.vm_info.security_group.security_group_rules[count.index].port_range_min
-#   port_range_max    = var.vm_info.security_group.security_group_rules[count.index].port_range_max
-#   remote_ip_prefix  = var.vm_info.security_group.security_group_rules[count.index].remote_ip_prefix
-#   security_group_id = local.security_group_flag == 1 ? "${openstack_networking_secgroup_v2.create_security_group[0].id}" : jsondecode(data.http.get_security_groups_list.response_body)["security_groups"].0.id
-# }
-
 resource "openstack_compute_instance_v2" "nhn_create_instance" {
   name              = var.vm_name
   image_id          = data.openstack_images_image_ids_v2.get_image.ids[0]
