@@ -82,6 +82,18 @@ variable "create_security_group_name" {
   default = null
 }
 
+variable "create_security_group_rules" {
+  type = list(object({
+    direction        = optional(string)
+    ethertype        = optional(string)
+    protocol         = optional(string)
+    port_range_min   = optional(string)
+    port_range_max   = optional(string)
+    remote_ip_prefix = optional(string)
+  }))
+  default = null
+}
+
 variable "user_data_file_path" {
   type = string
 }
