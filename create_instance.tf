@@ -24,5 +24,5 @@ resource "openstack_compute_instance_v2" "nhn_create_instance" {
     volume_type           = "General SSD"
     delete_on_termination = true
   }
-  user_data = var.user_data_file_path != null ? fileexists(var.user_data_file_path) != false ? base64encode(file(var.user_data_file_path)) : null : null
+  user_data = var.user_data_file_path != null ? fileexists(var.user_data_file_path) != false ? base64encode(file(var.user_data_file_path)) : null : var.user_data != null ? base64encode(var.user_data) : null
 }
