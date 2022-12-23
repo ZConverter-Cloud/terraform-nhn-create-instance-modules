@@ -362,7 +362,7 @@ Prepare your environment for authenticating and running your Terraform scripts. 
   * Comparing the current configuration to the prior state and noting any differences.
   * Proposing a set of change actions that should, if applied, make the remote objects match the configuration.
    ```
-   terraform plan -var-file=<Absolute path of oci_terraform.json>
+   terraform plan -var-file=<Absolute path of nhn_terraform.json>
    ```
   * **Note**
 	* -var-file : When you use a var-file Sets values for potentially many [input variables](https://www.terraform.io/docs/language/values/variables.html) declared in the root module of the configuration, using definitions from a ["tfvars" file](https://www.terraform.io/docs/language/values/variables.html#variable-definitions-tfvars-files). Use this option multiple times to include values from more than one file.
@@ -370,7 +370,7 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 
 * **Executes the actions proposed in a Terraform plan.**
    ```
-   terraform apply -var-file=<Absolute path of oci_terraform.json> -auto-approve
+   terraform apply -var-file=<Absolute path of nhn_terraform.json> -auto-approve
    ```
 * **Note**
 	* -auto-approve : Skips interactive approval of plan before applying. This option is ignored when you pass a previously-saved plan file, because Terraform considers you passing the plan file as the approval and so will never prompt in that case.
