@@ -20,7 +20,7 @@ resource "openstack_compute_instance_v2" "nhn_create_instance" {
     source_type           = "image"
     destination_type      = local.destination_type
     boot_index            = 0
-    volume_size           = local.boot_size
+    volume_size           = local.boot_volume_size_in_gbs
     volume_type           = "General SSD"
     delete_on_termination = true
   }
