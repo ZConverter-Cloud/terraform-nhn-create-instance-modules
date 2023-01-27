@@ -133,6 +133,7 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 				})
 				network_interface = object({
 					network_name = string
+					security_group_name = string
 					create_security_group_name = string
 					create_security_group_rules = optional(list(object({
 						direction = optional(string,null)
@@ -173,6 +174,7 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 					flavor_name = null
 				}
 				network_interface = {
+					security_group_name = null
 					create_security_group_name = null
 					create_security_group_rules = [{
 						direction = null
@@ -219,6 +221,7 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 		ssh_public_key_file  = var.terraform_data.vm_info.ssh_authorized_keys.ssh_public_key_file
 		
 		network_name  = var.terraform_data.vm_info.network_interface.network_name
+		security_group_name  = var.terraform_data.vm_info.network_interface.security_group_name
 		create_security_group_name  = var.terraform_data.vm_info.network_interface.create_security_group_name
 		create_security_group_rules  = var.terraform_data.vm_info.network_interface.create_security_group_rules
 		
@@ -329,7 +332,8 @@ Prepare your environment for authenticating and running your Terraform scripts. 
                "flavor_name" : null
             },
             "network_interface" : {
-	           "create_security_group_name" : null
+	       "security_group_name" : null,
+	       "create_security_group_name" : null,
                "create_security_group_rules" : [
                   {
                      "direction" : null,
