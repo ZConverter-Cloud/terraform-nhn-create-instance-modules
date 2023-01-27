@@ -72,7 +72,7 @@ variable "network_name" {
   type = string
 }
 
-variable "security_groups_name" {
+variable "security_group_name" {
   type    = string
   default = null
 }
