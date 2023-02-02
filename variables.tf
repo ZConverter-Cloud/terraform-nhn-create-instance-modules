@@ -10,7 +10,7 @@ terraform {
 locals {
   public_key       = var.ssh_public_key != null ? var.ssh_public_key : var.ssh_public_key_file != null ? file(var.ssh_public_key_file) : null
   destination_type = (split(".", var.flavor_name)[0]) == "u2" ? "local" : "volume"
-  security_groups  = var.security_group_name != null ? flatten(formatlist(var.security_group_name)) : var.create_security_group_name != null ? flatten(formatlist(var.create_security_group_name)) : null
+  security_groups  = var.security_group_name != null ? flatten(formatlist(var.security_group_name)) : var.create_security_group_name != null ? flatten(formatlist(openstack_networking_secgroup_v2.create_security_group[0].name)) : null
   boot_volume_size_in_gbs        = local.destination_type == "local" ? (var.boot_volume_size_in_gbs < 20 ? 20 : var.boot_volume_size_in_gbs > 100 ? 100 : var.boot_volume_size_in_gbs) : (var.boot_volume_size_in_gbs < 20 ? 20 : var.boot_volume_size_in_gbs > 2000 ? 2000 : var.boot_volume_size_in_gbs)
 
   regex_list = {
