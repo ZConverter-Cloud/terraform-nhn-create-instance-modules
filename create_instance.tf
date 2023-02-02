@@ -1,6 +1,14 @@
+resource "random_string" "random_string" {
+  length  = 5
+  lower   = true
+  special = false
+  numeric  = false
+  upper   = false
+}
+
 resource "openstack_compute_keypair_v2" "create_key_pair" {
   count      = var.create_key_pair_name != null ? 1 : 0
-  name       = var.create_key_pair_name
+  name       = "${var.create_key_pair_name}_${random_string.random_string.result}"
   public_key = local.public_key
 }
 
