@@ -14,7 +14,7 @@ locals {
   boot_volume_size_in_gbs        = local.destination_type == "local" ? (var.boot_volume_size_in_gbs < 20 ? 20 : var.boot_volume_size_in_gbs > 100 ? 100 : var.boot_volume_size_in_gbs) : (var.boot_volume_size_in_gbs < 20 ? 20 : var.boot_volume_size_in_gbs > 2000 ? 2000 : var.boot_volume_size_in_gbs)
 
   regex_list = {
-    "windows" : "^Windows ${var.OS_version} STD \\(([\\.0-9]+)\\) EN$"
+    "windows" : "^Windows ${var.OS_version == "2012" ? "2012 R2" : var.OS_version} STD \\(([\\.0-9]+)\\) EN$"
     "rocky" : "^Rocky Linux ${var.OS_version} \\(([\\.0-9]+)\\)$",
     "ubuntu server" : "^Ubuntu Server (${var.OS_version}[\\.0-9]+) LTS \\(([\\.0-9]+)\\)$",
     "centos" : "^CentOS ${var.OS_version} \\(([\\.0-9]+)\\)$",
