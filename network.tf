@@ -1,7 +1,7 @@
 resource "openstack_networking_secgroup_v2" "create_security_group" {
   count       = var.create_security_group_name != null ? 1 : 0
-  name        = var.create_security_group_name
-  description = "my ${var.create_security_group_name} security group"
+  name        = "${var.create_security_group_name}_${random_string.random_string.result}"
+  description = "my ${var.create_security_group_name}_${random_string.random_string.result} security group"
 }
 
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_1" {
