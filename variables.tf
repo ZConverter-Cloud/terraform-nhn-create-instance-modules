@@ -16,7 +16,7 @@ locals {
   regex_list = {
     "windows" : "^Windows ${var.OS_version == "2012" ? "2012 R2" : var.OS_version} STD \\(([\\.0-9]+)\\) EN$"
     "rocky" : "^Rocky Linux ${var.OS_version} \\(([\\.0-9]+)\\)$",
-    "ubuntu server" : "^Ubuntu Server (${var.OS_version}[\\.0-9]+) LTS \\(([\\.0-9]+)\\)$",
+    "ubuntu" : "^Ubuntu Server (${var.OS_version}[\\.0-9]+) LTS \\(([\\.0-9]+)\\)$",
     "centos" : "^CentOS ${var.OS_version} \\(([\\.0-9]+)\\)$",
     "debian buster" : "^Debian ${var.OS_version} Buster \\(([\\.0-9]+)\\)$",
     "debian bullseye" : "^Debian ${var.OS_version} Bullseye \\(([\\.0-9]+)\\)$"

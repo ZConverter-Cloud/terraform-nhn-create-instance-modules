@@ -92,145 +92,104 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 * To use terraform, you must have a terraform file of command written and a terraform executable.
 * You should create a folder to use terraform, create a `terraform.tf` file, and enter the contents below.
 	```
-	#Define required providers
+	# Define required providers
 	terraform {
-		required_version  =  ">= 1.3.0"
+		required_version = ">= 1.3.0"
 		required_providers {
-			openstack  =  {
-				source = "terraform-provider-openstack/openstack"
+			openstack = {
+				source  = "terraform-provider-openstack/openstack"
 				version = "1.48.0"
 			}
 		}
 	}
 
-	#Configure the OpenStack Provider
-	provider  "openstack" {
-		user_name  = var.terraform_data.provider.user_name
-		tenant_id  = var.terraform_data.provider.tenant_id
+	# Configure the OpenStack Provider
+	provider "openstack" {
+		user_name = var.terraform_data.provider.user_name
+		tenant_id = var.terraform_data.provider.tenant_id
 		password  = var.terraform_data.provider.password
 		auth_url  = var.terraform_data.provider.auth_url
-		region  = var.terraform_data.provider.region
+		region    = var.terraform_data.provider.region
 	}
-	
-	#variable
-	variable  "terraform_data" {
-		type  =  object({
+
+	# Variable
+	variable "terraform_data" {
+		type = object({
 			provider = object({
 				user_name = string
 				tenant_id = string
-				password = string
-				auth_url = string
-				region = string
+				password  = string
+				auth_url  = string
+				region    = string
 			})
 			vm_info = object({
-				vm_name = string
+				vm_name             = string
 				user_data_file_path = optional(string, null)
-				additional_volumes = optional(list(number), [])
+				additional_volumes  = optional(list(number), [])
 				OS = object({
-					OS_name = string
-					OS_version = string
-					boot_size = optional(number, 20)
+					OS_name                 = string
+					OS_version              = string
+					boot_volume_size_in_gbs = optional(number, 20)
 				})
 				network_interface = object({
-					network_name = string
-					security_group_name = string
-					create_security_group_name = string
+					network_name               = string
+					security_group_name        = optional(string, null)
+					create_security_group_name = optional(string, null)
 					create_security_group_rules = optional(list(object({
-						direction = optional(string,null)
-						ethertype = optional(string,null)
-						protocol = optional(string,null)
-						port_range_min = optional(string,null)
-						port_range_max = optional(string,null)
-						remote_ip_prefix = optional(string,null)
+						direction        = optional(string, null)
+						ethertype        = optional(string, null)
+						protocol         = optional(string, null)
+						port_range_min   = optional(string, null)
+						port_range_max   = optional(string, null)
+						remote_ip_prefix = optional(string, null)
 					})), null)
 				})
 				flavor = object({
 					flavor_name = string
 				})
 				ssh_authorized_keys = optional(object({
-					key_pair_name = optional(string, null)
+					key_pair_name        = optional(string, null)
 					create_key_pair_name = optional(string, null)
-					ssh_public_key = optional(string, null)
-					ssh_public_key_file = optional(string, null)
+					ssh_public_key       = optional(string, null)
+					ssh_public_key_file  = optional(string, null)
 				}), {
-					key_pair_name = null
+					key_pair_name        = null
 					create_key_pair_name = null
-					ssh_public_key = null
-					ssh_public_key_file = null
+					ssh_public_key       = null
+					ssh_public_key_file  = null
 				})
 			})
 		})
-		default  =  {
-			provider = {
-				auth_url = null
-				password = null
-				region = null
-				tenant_id = null
-				user_name = null
-			}
-			vm_info = {
-				additional_volumes = []
-				flavor = {
-					flavor_name = null
-				}
-				network_interface = {
-					security_group_name = null
-					create_security_group_name = null
-					create_security_group_rules = [{
-						direction = null
-						ethertype = null
-						protocol = null
-						port_range_min = null
-						port_range_max = null
-						remote_ip_prefix = null
-					}]
-					network_name = null
-				}
-				OS = {
-					OS_name = null
-					OS_version = null
-					boot_size = 20
-				}
-				ssh_authorized_keys = {
-					create_key_pair_name = null
-					key_pair_name = null
-					ssh_public_key = null
-					ssh_public_key_file = null
-				}
-				user_data_file_path = null
-				vm_name = null
-			}
-		}
 	}
 
-	#create_instance
-	module  "create_nhn_instance" {
-		source  =  "git::https://github.com/ZConverter-samples/terraform-nhn-create-instance-modules.git"
+	# Create instance
+	module "create_nhn_instance" {
+		source  = "git::https://github.com/ZConverter-Cloud/terraform-nhn-create-instance-modules.git"
 		region  = var.terraform_data.provider.region
-		vm_name  = var.terraform_data.vm_info.vm_name
-		
-		OS  = var.terraform_data.vm_info.OS.OS_name
-		OS_version  = var.terraform_data.vm_info.OS.OS_version
-		boot_size  = var.terraform_data.vm_info.OS.boot_size
-		
-		flavor_name  = var.terraform_data.vm_info.flavor.flavor_name
-		
-		key_pair_name  = var.terraform_data.vm_info.ssh_authorized_keys.key_pair_name
-		create_key_pair_name  = var.terraform_data.vm_info.ssh_authorized_keys.create_key_pair_name
-		ssh_public_key  = var.terraform_data.vm_info.ssh_authorized_keys.ssh_public_key
+		vm_name = var.terraform_data.vm_info.vm_name
+
+		OS                      = var.terraform_data.vm_info.OS.OS_name
+		OS_version              = var.terraform_data.vm_info.OS.OS_version
+		boot_volume_size_in_gbs = var.terraform_data.vm_info.OS.boot_volume_size_in_gbs
+
+		flavor_name = var.terraform_data.vm_info.flavor.flavor_name
+
+		key_pair_name        = var.terraform_data.vm_info.ssh_authorized_keys.key_pair_name
+		create_key_pair_name = var.terraform_data.vm_info.ssh_authorized_keys.create_key_pair_name
+		ssh_public_key       = var.terraform_data.vm_info.ssh_authorized_keys.ssh_public_key
 		ssh_public_key_file  = var.terraform_data.vm_info.ssh_authorized_keys.ssh_public_key_file
-		
-		network_name  = var.terraform_data.vm_info.network_interface.network_name
-		security_group_name  = var.terraform_data.vm_info.network_interface.security_group_name
+
+		network_name                = var.terraform_data.vm_info.network_interface.network_name
+		security_group_name         = var.terraform_data.vm_info.network_interface.security_group_name
 		create_security_group_name  = var.terraform_data.vm_info.network_interface.create_security_group_name
-		create_security_group_rules  = var.terraform_data.vm_info.network_interface.create_security_group_rules
-		
-		user_data_file_path  = var.terraform_data.vm_info.user_data_file_path
+		create_security_group_rules = var.terraform_data.vm_info.network_interface.create_security_group_rules
+
+		user_data_file_path = var.terraform_data.vm_info.user_data_file_path
 		additional_volumes  = var.terraform_data.vm_info.additional_volumes
 	}
 
-	output  "result" {
-		value  =  module.create_nhn_instance.result
+	output "result" {
+		value = module.create_nhn_instance.result
 	}
    ```
 * After creating the nhn_terraform.json file to enter the user's value, you must enter the contents below. 
@@ -250,8 +209,8 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 				"vm_name" : "test",
 				"OS" : {
 					"OS_name" : "ubuntu server",
-					"OS_version" : "18.04",
-					"boot_size" : 30
+					"OS_version" : "20.04",
+					"boot_volume_size_in_gbs" : 30
 				},
 				"network_interface" : {
 					"network_name" : "Default Network",
@@ -272,7 +231,7 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 				},
 				"ssh_authorized_keys" : {
 					"create_key_pair_name" : "test-key",
-					"ssh_public_key" : "ssh-rsa AAAAB3NzaC1yc2EA**********************"
+					"ssh_public_key" : "ssh-rsa *************************"
 				},
 				"additional_volumes" : [50]
 			}
@@ -288,19 +247,20 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 | terraform_data.provider.password | string | yes | none |The password you recorded in the memo during the [preparation step](#get-api-key).|
 | terraform_data.provider.region | string | yes | none |The region you recorded in the memo during the [preparation step](#get-api-key).|
 | terraform_data.vm_info.vm_name | string | yes | none |The name of the instance you want to create.|
-| terraform_data.vm_info.OS.OS_name | string | yes | none |Enter the OS name you want to create among (windows, centos, ubuntu server, rocky, debian buster, debian bullseye).|
+| terraform_data.vm_info.OS.OS_name | string | yes | none |Enter the OS name you want to create among (`windows`, `centos`, `ubuntu`, `rocky`, `debian buster`, `debian bullseye`).|
 | terraform_data.vm_info.OS.OS_version | string | yes | none |The version of the OS you want to create.|
-| terraform_data.vm_info.OS.boot_size | number | no | 20 |Boot volume size of the instance you want to create.|
+| terraform_data.vm_info.OS.boot_volume_size_in_gbs | number | no | 20 |Boot volume size of the instance you want to create.|
 | terraform_data.vm_info.flavor.flavor_name| string | yes | none |flavor types provided by NHN Cloud.|
 | terraform_data.vm_info.network_interface.network_name | string | yes | none | The name of the VPC you want to use.|
+| terraform_data.vm_info.network_interface.security_group_name | string | no | none | Name of the security-group you want to use.|
 | terraform_data.vm_info.network_interface.create_security_group_name | string | no | none | The name of the Security-Group to create.|
 | terraform_data.vm_info.network_interface.create_security_group_rules | list | no | none |	When you need to create ingress and egress rules.|
-| terraform_data.vm_info.network_interface.create_security_group_rules.[*].direction | stirng | conditional | none | Either "ingress" or "egress"|
-| terraform_data.vm_info.network_interface.create_security_group_rules.[*].ethertype | string | conditional | none | Either "IPv4" or "IPv6" |
-| terraform_data.vm_info.network_interface.create_security_group_rules.[*].protocol | string | conditional | none | Enter a supported protocol name |
-| terraform_data.vm_info.network_interface.create_security_group_rules.[*].port_range_min | string | conditional | none | Minimum Port Range (Use only when using udp, tcp protocol) |
-| terraform_data.vm_info.network_interface.create_security_group_rules.[*].port_range_max | string | conditional | none | Maximum Port Range (Use only when using udp, tcp protocol) |
-| terraform_data.vm_info.network_interface.create_security_group_rules.[*].remote_ip_prefix | string | conditional | none | CIDR (ex : 0.0.0.0/0) |
+| terraform_data.vm_info.network_interface.create_security_group_rules.[*].direction | stirng | conditional | none | Either `ingress` or `egress`|
+| terraform_data.vm_info.network_interface.create_security_group_rules.[*].ethertype | string | conditional | none | Either `IPv4` or `IPv6` |
+| terraform_data.vm_info.network_interface.create_security_group_rules.[*].protocol | string | conditional | none | Enter a supported protocol name [Supported Protocols](https://registry.terraform.io/providers/terraform-provider-openstack/openstack/1.48.0/docs/resources/networking_secgroup_rule_v2#protocol) |
+| terraform_data.vm_info.network_interface.create_security_group_rules.[*].port_range_min | string | conditional | none | Minimum Port Range (Use only when using `udp`, `tcp` `protocol`) |
+| terraform_data.vm_info.network_interface.create_security_group_rules.[*].port_range_max | string | conditional | none | Maximum Port Range (Use only when using `udp`, `tcp` `protocol`) |
+| terraform_data.vm_info.network_interface.create_security_group_rules.[*].remote_ip_prefix | string | conditional | none | CIDR (ex : `0.0.0.0/0`) |
 | terraform_data.vm_info.ssh_authorized_keys.ssh_public_key | string | conditional | none | ssh public key to use when using Linux-based OS. (Use only one of the following: ssh_public_key, ssh_public_key_file_path) |
 | terraform_data.vm_info.ssh_authorized_keys.ssh_public_key_file | string | conditional | none | Absolute path of ssh public key file to use when using Linux-based OS. (Use only one of the following: ssh_public_key, ssh_public_key_file_path) |
 | terraform_data.vm_info.user_data_file_path | string | conditional | none | Absolute path of user data file path to use when cloud-init. |
@@ -308,50 +268,44 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 
 * oci_terraform.json Full Example
 
-   ```
-   {
-      "terraform_data" : {
-         "provider" : {
-            "tenancy_ocid" : null,
-            "user_ocid" : null,
-            "fingerprint" : null,
-            "private_key_path" : null,
-            "region" : null
-        },
-        "vm_info" : {
-            "region" : null,
-            "vm_name" : null,
-            "user_data_file_path" : null,
-            "additional_volumes" : null,
-            "OS" : {
-               "OS_name" : null,
-               "OS_version" : null,
-               "boot_volume_size_in_gbs" : null
-            },
-            "flavor" : {
-               "flavor_name" : null
-            },
-            "network_interface" : {
-	       "security_group_name" : null,
-	       "create_security_group_name" : null,
-               "create_security_group_rules" : [
-                  {
-                     "direction" : null,
-                     "protocol" : null,
-                     "port_range_min" : null,
-                     "port_range_max" : null,
-                     "remote_ip_prefix" : null,
-                  }
-               ]
-            },
-            "ssh_authorized_keys" : {
-               "ssh_public_key" : null,
-               "ssh_public_key_file" : null
-            }
-         }
-      }
-   }
-   ```
+    ```
+	{
+		"terraform_data": {
+			"provider": {
+				"user_name": null,
+				"tenant_id": null,
+				"password": null,
+				"auth_url": null,
+				"region": null
+			},
+			"vm_info": {
+				"vm_name": null,
+				"user_data_file_path": null,
+				"additional_volumes": [],
+				"OS": {
+					"OS_name": null,
+					"OS_version": null,
+					"boot_volume_size_in_gbs": 20
+				},
+				"network_interface": {
+					"network_name": null,
+					"security_group_name": null,
+					"create_security_group_name": null,
+					"create_security_group_rules": null
+				},
+				"flavor": {
+					"flavor_name": null
+				},
+				"ssh_authorized_keys": {
+					"key_pair_name": null,
+					"create_key_pair_name": null,
+					"ssh_public_key": null,
+					"ssh_public_key_file": null
+				}
+			}
+		}
+	}
+    ```
 
 * **Go to the file path of Terraform.exe and Initialize the working directory containing the terraform configuration file.**
 
