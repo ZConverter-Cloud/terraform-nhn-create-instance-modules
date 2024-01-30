@@ -85,7 +85,7 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 	   -   **KR1**: Korea (Pangyo) Region
 	   -   **KR2**: Korea (Pyeongchon) Region
 	   -   **JP1**: Japan (Tokyo) Region
-	![Account User](/terraform-nhn-create-instance-modules/images/api.png)
+	![Account User](/images/api.png)
 
 ##  Start Terraform
 
