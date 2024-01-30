@@ -85,7 +85,7 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 	   -   **KR1**: Korea (Pangyo) Region
 	   -   **KR2**: Korea (Pyeongchon) Region
 	   -   **JP1**: Japan (Tokyo) Region
-	![Account User](https://raw.githubusercontent.com/ZConverter-samples/terraform-nhn-create-instance-modules/main/images/api.png)
+	![Account User](/terraform-nhn-create-instance-modules/images/api.png)
 
 ##  Start Terraform
 
@@ -266,7 +266,7 @@ Prepare your environment for authenticating and running your Terraform scripts. 
 | terraform_data.vm_info.user_data_file_path | string | conditional | none | Absolute path of user data file path to use when cloud-init. |
 | terraform_data.vm_info.additional_volumes | string | conditional | none | Use to add a block volume. Use numeric arrays. |
 
-* oci_terraform.json Full Example
+* nhn_terraform.json Full Example
 
     ```
 	{
