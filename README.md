@@ -13,7 +13,7 @@
 
 ## Before You Begin
 To successfully perform this tutorial, you must have the following:
-
+   * You need to install [git](https://git-scm.com/downloads) in advance to use it.
    * An NHN Cloud account. [See Signing Up for NHN Cloud](https://docs.toast.com/en/TOAST/en/user-guide)
 
 ## Prepare
